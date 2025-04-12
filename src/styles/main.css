@@ -1,0 +1,254 @@
+/**
+ * ElementCraft - Main CSS Styles
+ * 
+ * This file contains the base styles for the ElementCraft game,
+ * including reset styles, variables, and global styles.
+ * 
+ * @author ElementCraft Team
+ * @version 1.0.0
+ */
+
+/* CSS Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Color Variables */
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-accent-primary: #4fc3f7;
+  --color-accent-secondary: #8b5cf6;
+  --color-text-primary: #e9ecef;
+  --color-text-secondary: #adb5bd;
+  
+  /* Element Colors */
+  --color-element-fire: #ff6b6b;
+  --color-element-water: #4fc3f7;
+  --color-element-earth: #66bb6a;
+  --color-element-air: #e0e0e0;
+  --color-element-metal: #b0bec5;
+  --color-element-wood: #8d6e63;
+  
+  /* Font Variables */
+  --font-primary: 'Exo 2', sans-serif;
+  --font-secondary: 'Roboto Mono', monospace;
+  
+  /* Spacing Variables */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Game Board Variables */
+  --cell-size: 60px;
+  --grid-gap: 4px;
+  
+  /* Animation Variables */
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-primary);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  font-size: 2.5rem;
+  background: linear-gradient(to right, var(--color-accent-primary), var(--color-accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(75, 192, 192, 0.2);
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Buttons */
+button {
+  font-family: var(--font-primary);
+  background-color: var(--color-accent-primary);
+  color: var(--color-bg-primary);
+  border: none;
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+button:hover {
+  background-color: var(--color-accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Game Board Styles */
+.game-board {
+  display: grid;
+  gap: var(--grid-gap);
+  margin: var(--spacing-lg) auto;
+}
+
+.game-cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background-color: var(--color-bg-secondary);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all var(--transition-medium);
+  cursor: pointer;
+}
+
+.game-cell:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+}
+
+/* Element Styles */
+.element {
+  width: 90%;
+  height: 90%;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: all var(--transition-medium);
+}
+
+.element-fire {
+  background-color: var(--color-element-fire);
+  box-shadow: 0 0 8px var(--color-element-fire);
+}
+
+.element-water {
+  background-color: var(--color-element-water);
+  box-shadow: 0 0 8px var(--color-element-water);
+}
+
+.element-earth {
+  background-color: var(--color-element-earth);
+  box-shadow: 0 0 8px var(--color-element-earth);
+}
+
+.element-air {
+  background-color: var(--color-element-air);
+  box-shadow: 0 0 8px var(--color-element-air);
+}
+
+.element-metal {
+  background-color: var(--color-element-metal);
+  box-shadow: 0 0 8px var(--color-element-metal);
+}
+
+.element-wood {
+  background-color: var(--color-element-wood);
+  box-shadow: 0 0 8px var(--color-element-wood);
+}
+
+/* UI Elements */
+.ui-panel {
+  background-color: var(--color-bg-secondary);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ui-title {
+  font-size: 1.2rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent-primary);
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 5px rgba(79, 195, 247, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(79, 195, 247, 0.5);
+  }
+}
+
+/* Utility Classes */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glow {
+  animation: glowing 2s infinite;
+}
