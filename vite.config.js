@@ -17,13 +17,13 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@assets': path.resolve(__dirname, './public/assets'),
-      '@styles': path.resolve(__dirname, './src/styles'),
-      '@constants': path.resolve(__dirname, './src/constants'),
+      '@': path.resolve(import.meta.dirname, './src'),
+      '@components': path.resolve(import.meta.dirname, './src/components'),
+      '@hooks': path.resolve(import.meta.dirname, './src/hooks'),
+      '@utils': path.resolve(import.meta.dirname, './src/utils'),
+      '@assets': path.resolve(import.meta.dirname, './public/assets'),
+      '@styles': path.resolve(import.meta.dirname, './src/styles'),
+      '@constants': path.resolve(import.meta.dirname, './src/constants'),
     },
   },
   // Optimize asset handling
@@ -34,11 +34,25 @@ export default defineConfig({
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks(id) {
+          const normalizedId = id.replace(/\\/g, '/');
           // Split vendor code from app code
-          'vendor': ['react', 'react-dom', 'matter-js', 'howler'],
+          if (
+            normalizedId.includes('/node_modules/react/') ||
+            normalizedId.includes('/node_modules/react-dom/') ||
+            normalizedId.includes('/node_modules/matter-js/') ||
+            normalizedId.includes('/node_modules/howler/')
+          ) {
+            return 'vendor';
+          }
           // Split game engine from UI components
-          'game-engine': ['@utils/gameLogic', '@utils/interactions', '@utils/physics'],
+          if (
+            normalizedId.includes('/src/utils/gameLogic') ||
+            normalizedId.includes('/src/utils/interactions') ||
+            normalizedId.includes('/src/utils/physics')
+          ) {
+            return 'game-engine';
+          }
         }
       }
     }
