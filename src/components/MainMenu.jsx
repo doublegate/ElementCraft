@@ -66,7 +66,7 @@ const MainMenu = ({
   });
   
   // Animation for the menu items
-  const getMenuItemAnimation = (index) => useSpring({
+  const useMenuItemAnimation = (index) => useSpring({
     from: { opacity: 0, transform: 'translateX(-30px)' },
     to: { opacity: animationComplete ? 1 : 0, transform: animationComplete ? 'translateX(0)' : 'translateX(-30px)' },
     config: { tension: 200, friction: 20 },
@@ -74,11 +74,27 @@ const MainMenu = ({
   });
   
   // Animation for hovering menu items
-  const getHoverAnimation = (item) => useSpring({
+  const useHoverAnimation = (item) => useSpring({
     transform: hoveredItem === item ? 'translateX(10px)' : 'translateX(0)',
     color: hoveredItem === item ? 'var(--color-accent-primary)' : 'var(--color-text-primary)',
     config: { tension: 300, friction: 20 }
   });
+
+  const menuItemAnimations = [
+    useMenuItemAnimation(0),
+    useMenuItemAnimation(1),
+    useMenuItemAnimation(2),
+    useMenuItemAnimation(3),
+    useMenuItemAnimation(4),
+  ];
+
+  const hoverAnimations = {
+    start: useHoverAnimation('start'),
+    continue: useHoverAnimation('continue'),
+    achievements: useHoverAnimation('achievements'),
+    settings: useHoverAnimation('settings'),
+    credits: useHoverAnimation('credits'),
+  };
   
   // Animation for player stats
   const statsAnimation = useSpring({
@@ -119,26 +135,26 @@ const MainMenu = ({
         </animated.div>
         
         <div className="menu-options">
-          <animated.div style={getMenuItemAnimation(0)}>
+          <animated.div style={menuItemAnimations[0]}>
             <animated.button 
               className="menu-button"
               onClick={() => handleClick(onStartGame)}
               onMouseEnter={() => handleHover('start')}
               onMouseLeave={() => setHoveredItem(null)}
-              style={getHoverAnimation('start')}
+              style={hoverAnimations.start}
             >
               <span className="button-icon">🔥</span>
               <span className="button-text">New Game</span>
             </animated.button>
           </animated.div>
           
-          <animated.div style={getMenuItemAnimation(1)}>
+          <animated.div style={menuItemAnimations[1]}>
             <animated.button 
               className="menu-button"
               onClick={() => handleClick(onContinueGame)}
               onMouseEnter={() => handleHover('continue')}
               onMouseLeave={() => setHoveredItem(null)}
-              style={getHoverAnimation('continue')}
+              style={hoverAnimations.continue}
               disabled={!hasSavedGame}
             >
               <span className="button-icon">💧</span>
@@ -146,39 +162,39 @@ const MainMenu = ({
             </animated.button>
           </animated.div>
           
-          <animated.div style={getMenuItemAnimation(2)}>
+          <animated.div style={menuItemAnimations[2]}>
             <animated.button 
               className="menu-button"
               onClick={() => handleClick(onAchievements)}
               onMouseEnter={() => handleHover('achievements')}
               onMouseLeave={() => setHoveredItem(null)}
-              style={getHoverAnimation('achievements')}
+              style={hoverAnimations.achievements}
             >
               <span className="button-icon">🏆</span>
               <span className="button-text">Achievements</span>
             </animated.button>
           </animated.div>
           
-          <animated.div style={getMenuItemAnimation(3)}>
+          <animated.div style={menuItemAnimations[3]}>
             <animated.button 
               className="menu-button"
               onClick={() => handleClick(onSettings)}
               onMouseEnter={() => handleHover('settings')}
               onMouseLeave={() => setHoveredItem(null)}
-              style={getHoverAnimation('settings')}
+              style={hoverAnimations.settings}
             >
               <span className="button-icon">⚙️</span>
               <span className="button-text">Settings</span>
             </animated.button>
           </animated.div>
           
-          <animated.div style={getMenuItemAnimation(4)}>
+          <animated.div style={menuItemAnimations[4]}>
             <animated.button 
               className="menu-button"
               onClick={() => handleClick(onCredits)}
               onMouseEnter={() => handleHover('credits')}
               onMouseLeave={() => setHoveredItem(null)}
-              style={getHoverAnimation('credits')}
+              style={hoverAnimations.credits}
             >
               <span className="button-icon">ℹ️</span>
               <span className="button-text">About</span>
