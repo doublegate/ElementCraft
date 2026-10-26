@@ -13,17 +13,50 @@ import React from 'react';
 import { useSpring, animated } from 'react-spring';
 import { elementColors, elementSymbols, elementDescriptions } from '../constants/elements';
 
-const ElementSelector = ({ elements, selectedElement, onSelectElement, playSound }) => {
-  // Generate tooltips for elements that show their descriptions
-  const generateTooltip = (element) => {
-    return (
-      <div className="element-tooltip">
-        <h4>{element.charAt(0).toUpperCase() + element.slice(1)}</h4>
-        <p>{elementDescriptions[element]}</p>
+// Generate tooltips for elements that show their descriptions
+const generateTooltip = (element) => {
+  return (
+    <div className="element-tooltip">
+      <h4>{element.charAt(0).toUpperCase() + element.slice(1)}</h4>
+      <p>{elementDescriptions[element]}</p>
+    </div>
+  );
+};
+
+const ElementSelectorItem = ({ element, isSelected, onSelectElement }) => {
+  const animation = useSpring({
+    transform: isSelected
+      ? 'scale(1.1) translateY(-5px)'
+      : 'scale(1) translateY(0)',
+    boxShadow: isSelected
+      ? `0 10px 20px rgba(0,0,0,0.2), 0 0 10px ${elementColors[element]}`
+      : '0 2px 5px rgba(0,0,0,0.1)',
+    config: { tension: 300, friction: 20 }
+  });
+
+  return (
+    <animated.div
+      className={`element-item ${isSelected ? 'selected' : ''}`}
+      style={{
+        ...animation,
+        backgroundColor: elementColors[element]
+      }}
+      onClick={() => onSelectElement(element)}
+    >
+      <div className="element-icon">
+        {elementSymbols[element]}
       </div>
-    );
-  };
-  
+      <div className="element-name">
+        {element.charAt(0).toUpperCase() + element.slice(1)}
+      </div>
+      
+      {/* Tooltip shows on hover */}
+      {generateTooltip(element)}
+    </animated.div>
+  );
+};
+
+const ElementSelector = ({ elements, selectedElement, onSelectElement, playSound }) => {
   // Handle element selection
   const handleSelectElement = (element) => {
     playSound();
@@ -35,40 +68,14 @@ const ElementSelector = ({ elements, selectedElement, onSelectElement, playSound
       <h3 className="selector-title">Elements</h3>
       
       <div className="elements-container">
-        {elements.map((element) => {
-          // Animation for selected element
-          const animation = useSpring({
-            transform: element === selectedElement
-              ? 'scale(1.1) translateY(-5px)'
-              : 'scale(1) translateY(0)',
-            boxShadow: element === selectedElement
-              ? `0 10px 20px rgba(0,0,0,0.2), 0 0 10px ${elementColors[element]}`
-              : '0 2px 5px rgba(0,0,0,0.1)',
-            config: { tension: 300, friction: 20 }
-          });
-          
-          return (
-            <animated.div
-              key={element}
-              className={`element-item ${element === selectedElement ? 'selected' : ''}`}
-              style={{
-                ...animation,
-                backgroundColor: elementColors[element]
-              }}
-              onClick={() => handleSelectElement(element)}
-            >
-              <div className="element-icon">
-                {elementSymbols[element]}
-              </div>
-              <div className="element-name">
-                {element.charAt(0).toUpperCase() + element.slice(1)}
-              </div>
-              
-              {/* Tooltip shows on hover */}
-              {generateTooltip(element)}
-            </animated.div>
-          );
-        })}
+        {elements.map((element) => (
+          <ElementSelectorItem
+            key={element}
+            element={element}
+            isSelected={element === selectedElement}
+            onSelectElement={handleSelectElement}
+          />
+        ))}
       </div>
       
       {/* Element Combination Guide */}

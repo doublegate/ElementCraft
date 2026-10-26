@@ -14,6 +14,32 @@ import { useSpring, animated } from 'react-spring';
 import Matter from 'matter-js';
 import { elementColors, elementSymbols } from '../constants/elements';
 
+const GameBoardCell = ({ cell, rowIndex, colIndex, onCellClick }) => {
+  const animation = useSpring({
+    from: { opacity: 0, transform: 'scale(0.8)' },
+    to: { opacity: 1, transform: 'scale(1)' },
+    config: { tension: 280, friction: 20 },
+    delay: (rowIndex + colIndex) * 50
+  });
+
+  return (
+    <animated.div
+      className={`game-cell ${cell ? 'occupied' : ''}`}
+      style={animation}
+      onClick={() => onCellClick(rowIndex, colIndex)}
+    >
+      {cell && (
+        <div
+          className={`element element-${cell.element}`}
+          title={cell.element.charAt(0).toUpperCase() + cell.element.slice(1)}
+        >
+          {elementSymbols[cell.element]}
+        </div>
+      )}
+    </animated.div>
+  );
+};
+
 const GameBoard = ({ board, onCellClick, selectedElement }) => {
   // Reference to the physics canvas for Matter.js
   const physicsRef = useRef(null);
@@ -224,16 +250,6 @@ const GameBoard = ({ board, onCellClick, selectedElement }) => {
     World.add(engine.world, newBodies);
   }, [board]);
   
-  // Generate animations for cells when they're updated
-  const getCellAnimation = (cell, rowIndex, colIndex) => {
-    return useSpring({
-      from: { opacity: 0, transform: 'scale(0.8)' },
-      to: { opacity: 1, transform: 'scale(1)' },
-      config: { tension: 280, friction: 20 },
-      delay: (rowIndex + colIndex) * 50 // Cascade effect
-    });
-  };
-  
   // Render the game board grid
   return (
     <div className="game-board-container">
@@ -246,27 +262,15 @@ const GameBoard = ({ board, onCellClick, selectedElement }) => {
         }}
       >
         {board.map((row, rowIndex) => 
-          row.map((cell, colIndex) => {
-            const animation = getCellAnimation(cell, rowIndex, colIndex);
-            
-            return (
-              <animated.div
-                key={`${rowIndex}-${colIndex}`}
-                className={`game-cell ${cell ? 'occupied' : ''}`}
-                style={animation}
-                onClick={() => onCellClick(rowIndex, colIndex)}
-              >
-                {cell && (
-                  <div 
-                    className={`element element-${cell.element}`}
-                    title={cell.element.charAt(0).toUpperCase() + cell.element.slice(1)}
-                  >
-                    {elementSymbols[cell.element]}
-                  </div>
-                )}
-              </animated.div>
-            );
-          })
+          row.map((cell, colIndex) => (
+            <GameBoardCell
+              key={`${rowIndex}-${colIndex}`}
+              cell={cell}
+              rowIndex={rowIndex}
+              colIndex={colIndex}
+              onCellClick={onCellClick}
+            />
+          ))
         )}
       </div>
       
